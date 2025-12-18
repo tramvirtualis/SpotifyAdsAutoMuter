@@ -1,4 +1,4 @@
-# Spotify Ads Mute
+# Spotify Ads Auto-Muter
 
 Ứng dụng tự động tắt tiếng Spotify khi phát quảng cáo và bật lại khi hết quảng cáo.
 
@@ -18,12 +18,6 @@
 
 1. Nhấn `Win + R`, gõ `shell:startup`, nhấn Enter
 2. Copy shortcut từ Desktop vào thư mục vừa mở
-
-## Cách hoạt động
-
-- Khi phát nhạc: tiêu đề Spotify có dạng `Artist - Song`
-- Khi phát quảng cáo: tiêu đề chỉ hiện `Spotify` hoặc `Advertisement`
-- Dựa vào sự khác biệt này, ứng dụng tự động mute/unmute
 
 ## Lưu ý
 
