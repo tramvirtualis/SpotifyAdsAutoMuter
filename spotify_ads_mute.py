@@ -13,6 +13,7 @@ import time
 import ctypes
 from ctypes import POINTER, cast
 import logging
+import re
 from datetime import datetime
 import sys
 
@@ -57,7 +58,6 @@ class SpotifyAdsMute:
         'advertisement',
         'quảng cáo',
         'spotify',  # Khi chỉ hiện "Spotify" không có tên bài hát
-        'ad',
     ]
     
     # Các pattern cho biết đang phát nhạc (không phải quảng cáo)
@@ -125,19 +125,25 @@ class SpotifyAdsMute:
             
         title_lower = window_title.lower().strip()
         
-        # Nếu có format "Artist - Song", đây là nhạc
-        if ' - ' in window_title:
-            return False
+        # LOGIC QUAN TRỌNG:
+        # Nhạc Spotify thường có dạng "Artist - Song"
+        # Các dấu gạch có thể là: hyphen (-), en-dash (–), em-dash (—)
+        is_music_format = False
+        for sep in [' - ', ' – ', ' — ']:
+            if sep in window_title:
+                is_music_format = True
+                break
+                
+        if not is_music_format:
+            # Không có dấu gạch phân cách -> Khả năng cao là quảng cáo
+            return True
             
-        # Kiểm tra các từ khóa quảng cáo
+        # Nếu có định dạng nhạc, vẫn kiểm tra keyword nhưng chặt chẽ hơn
+        # 1. Kiểm tra các từ khóa dài (substring match ok)
         for keyword in self.AD_KEYWORDS:
             if keyword.lower() in title_lower:
                 return True
-                
-        # Nếu tiêu đề chỉ là "Spotify" hoặc "Spotify Premium" hoặc rỗng/ngắn
-        if title_lower in ['spotify', 'spotify premium', 'spotify free'] or len(title_lower) < 3:
-            return True
-            
+        
         return False
     
     def get_spotify_audio_session(self):
